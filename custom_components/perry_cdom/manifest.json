@@ -3,9 +3,9 @@
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/ivancoppa/homeassistant-perry-cdom/",
-  "domain": "perry-cdom",
+  "domain": "perry_cdom",
   "iot_class": "cloud_polling",
   "name": "Perry CDOM",
-  "requirements": [],
+  "requirements": ["voluptuous"],
   "version": "0.0.1"
 }

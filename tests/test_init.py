@@ -1,7 +1,7 @@
 """Test component setup."""
 from homeassistant.setup import async_setup_component
 
-from custom_components.perry-cdom.const import DOMAIN
+from custom_components.perry_cdom.const import DOMAIN
 
 
 async def test_async_setup(hass):
