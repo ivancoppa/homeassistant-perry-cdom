@@ -1,2 +1,3 @@
-# homeassistant-perry-cdom
-Home Assistant Integration for Perry CDOM
+# Perry CDOM for Home Assistant
+
+## Installation

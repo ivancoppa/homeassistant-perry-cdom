@@ -1,0 +1,11 @@
+{
+  "codeowners": ["@ivancoppa"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/ivancoppa/homeassistant-perry-cdom/",
+  "domain": "perry-cdom",
+  "iot_class": "cloud_polling",
+  "name": "Perry CDOM",
+  "requirements": [],
+  "version": "0.0.1"
+}
