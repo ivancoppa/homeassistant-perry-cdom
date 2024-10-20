@@ -64,9 +64,9 @@ from .const import (
     CDOM_SHARED_THERMO_MODE_OFF,
     CDOM_SHARED_SEASON_SUMMER,
     CDOM_SHARED_SEASON_WINTER,
-    CONF_PRESETS
+    CONF_PRESETS,
+    PRESET_FROST_GUARD,
 )
-PRESET_FROST_GUARD = "Frost Guard"
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -138,32 +138,6 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
         coordinator,
         ) -> None:
 
-
-    # _attr_current_humidity: int | None = None
-    # _attr_current_temperature: float | None = None
-    # _attr_fan_mode: str | None
-    # _attr_fan_modes: list[str] | None
-    # _attr_hvac_action: HVACAction | None = None
-    # _attr_hvac_mode: HVACMode | None
-    # _attr_hvac_modes: list[HVACMode]
-    # _attr_is_aux_heat: bool | None
-    # _attr_max_humidity: float = DEFAULT_MAX_HUMIDITY
-    # _attr_max_temp: float
-    # _attr_min_humidity: float = DEFAULT_MIN_HUMIDITY
-    # _attr_min_temp: float
-    # _attr_precision: float
-    # _attr_preset_mode: str | None
-    # _attr_preset_modes: list[str] | None
-    # _attr_supported_features: ClimateEntityFeature = ClimateEntityFeature(0)
-    # _attr_swing_mode: str | None
-    # _attr_swing_modes: list[str] | None
-    # _attr_target_humidity: float | None = None
-    # _attr_target_temperature_high: float | None
-    # _attr_target_temperature_low: float | None
-    # _attr_target_temperature_step: float | None = None
-    # _attr_target_temperature: float | None = None
-    # _attr_temperature_unit: str
-
         self.platforms = []
         self.data = dict()
         self.thermozone = dict()
@@ -186,20 +160,6 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
             self._attr_hvac_modes = [HVACMode.HEAT, HVACMode.OFF]
 
         _LOGGER.warning("CLIMATE: PerryCdomThermostat INIT UID: " + self._attr_unique_id + " Name: " + self._attr_name + " - zone " + str(self._zone_id))
-
-        #self._update_data()
-        
-        #self._attr_hvac_mode = initial_hvac_mode
-
-
-
-        #self._attr_temperature_unit = unit
-        #self._cur_temp = 18
-        #self._min_temp = 5
-        #self._max_temp = 39
-        #self._target_temp = 25
-        #self._attr_current_temperature = 18
-        #self._attr_preset_mode = PRESET_NONE
         
         self._coordinator=coordinator
 

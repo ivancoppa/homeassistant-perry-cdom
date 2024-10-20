@@ -35,6 +35,7 @@ CDOM_SHARED_SEASON_WINTER = 0
 # Summer Season: Cold
 CDOM_SHARED_SEASON_SUMMER = 1
 
+PRESET_FROST_GUARD = "Frost Guard"
 
 CONF_AC_MODE = "ac_mode"
 CONF_COLD_TOLERANCE = "cold_tolerance"
