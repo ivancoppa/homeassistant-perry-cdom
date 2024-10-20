@@ -5,6 +5,7 @@ DOMAIN = "perry_cdom"
 
 from homeassistant.components.climate import (
     PRESET_ACTIVITY,
+    PRESET_NONE,
     PRESET_AWAY,
     PRESET_COMFORT,
     PRESET_ECO,
@@ -43,6 +44,7 @@ CONF_MIN_DUR = "min_cycle_duration"
 CONF_PRESETS = {
     p: f"{p}_temp"
     for p in (
+        PRESET_NONE,
         PRESET_AWAY,
         PRESET_COMFORT,
         PRESET_ECO,
