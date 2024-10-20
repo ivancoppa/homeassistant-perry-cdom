@@ -1,4 +1,4 @@
-"""Support for Netatmo Smart thermostats."""
+"""Support for Perry CDOM Smart thermostats."""
 
 from __future__ import annotations
 
@@ -51,40 +51,57 @@ from homeassistant.const import (
 from .const import (
     DOMAIN,
     PLATFORMS,
-    CONF_SCAN_INTERVAL_SECONDS
+    CONF_UPDATE_INTERVAL_SECONDS,
+    CDOM_SHARED_THERMO_MODE_ON,
+    CDOM_SHARED_THERMO_MODE_OFF,
+    CDOM_SHARED_SEASON_SUMMER,
+    CDOM_SHARED_SEASON_WINTER
 )
 
 
 _LOGGER = logging.getLogger(__name__)
 # Time between updating data from GitHub
-SCAN_INTERVAL = timedelta(seconds=CONF_SCAN_INTERVAL_SECONDS)
+SCAN_INTERVAL = timedelta(seconds=CONF_UPDATE_INTERVAL_SECONDS)
 
 async def async_setup_entry(
     hass: HomeAssistant, config: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up the Climate platform."""
-    _LOGGER.warning("CLIMATE: Testing module climate")
-    _LOGGER.warning("CLIMATE: Testing module climate " + config.entry_id)
+    _LOGGER.info("CLIMATE: Set up the Climate platform. Id: " + config.entry_id)
+    _LOGGER.debug("CLIMATE: Set up the Climate platform. Config Options: " + json.dumps(dict(config.options)))
+    
 
     unit = hass.config.units.temperature_unit
     ac_mode = False
     initial_hvac_mode = HVACMode.AUTO
  
-    unique_id = "perrycdom"
+    unique_id = "perry_cdom"
 
-    coordinator = PerryCoordinator(hass, config,SCAN_INTERVAL)
+    coordinator = PerryCoordinator(hass, config, timedelta(seconds=config.options['cdom_scan_interval']))
     await coordinator.update()
 
     thermozone = coordinator.get_thermozone()
 
-    entities = []
-    for zone in thermozone['zones']:
-        thermostat = TestThermostat(
-            zone['name'],
+    entities = [
+        PerryCdomThermostat(
+            config.options['name'] + ' - Controller', # "Perry C.DOM/CRM4.0" + str(thermozone['CdomSerialNumber']),
+            True,
             ac_mode,
             initial_hvac_mode,
             unit,
-            unique_id + '_' + str(thermozone['CdomSerialNumber']) + '_' + str(zone['zoneId']),
+            unique_id + '_' + str(thermozone['CdomSerialNumber']) + '_controller',
+            0,
+            coordinator
+        )
+    ]
+    for zone in thermozone['zones']:
+        thermostat = PerryCdomThermostat(
+            config.options['name'] + ' - ' + zone['name'],
+            False,
+            ac_mode,
+            initial_hvac_mode,
+            unit,
+            unique_id + '_' + str(thermozone['CdomSerialNumber']) + '_' + str(zone['name']),
             zone['zoneId'],
             coordinator
         )
@@ -95,19 +112,14 @@ async def async_setup_entry(
 
     async_add_entities(entities)
 
-    
-async def async_update(self) -> None:
-    """dsds"""
-    _LOGGER.warning("CLIMATE: CLIMATE async_update ")
 
-
-
-class TestThermostat(ClimateEntity, RestoreEntity):
-    """Representation of a Generic Thermostat device."""
+class PerryCdomThermostat(ClimateEntity, RestoreEntity):
+    """Representation of a Perry C.Dom Thermostat device."""
 
     def __init__(
         self,
         name: str | None,
+        controller: bool | None,
         ac_mode: bool | None,
         initial_hvac_mode: HVACMode | None,
         unit: UnitOfTemperature,
@@ -115,8 +127,6 @@ class TestThermostat(ClimateEntity, RestoreEntity):
         zone_id: int | None,
         coordinator,
         ) -> None:
-        """ddsadsdas"""
-        _LOGGER.warning("CLIMATE: GenericThermostat INIT")
 
 
     # _attr_current_humidity: int | None = None
@@ -144,77 +154,118 @@ class TestThermostat(ClimateEntity, RestoreEntity):
     # _attr_target_temperature: float | None = None
     # _attr_temperature_unit: str
 
+        self.platforms = []
+        self.data = dict()
+        self.thermozone = dict()
+        self.zones = dict()
+
         self.ac_mode = ac_mode
-        self._hvac_mode = initial_hvac_mode
+        self.controller = controller
+        self._zone_id = zone_id
+        #self._hvac_mode = initial_hvac_mode
         self._attr_name = name
-        self._attr_hvac_mode = initial_hvac_mode
+        self._attr_unique_id = unique_id
+        self._attr_temperature_unit = unit
 
         if self.ac_mode:
             self._attr_hvac_modes = [HVACMode.COOL, HVACMode.OFF]
         else:
             self._attr_hvac_modes = [HVACMode.HEAT, HVACMode.OFF]
 
-        self._attr_unique_id = unique_id
+        _LOGGER.warning("CLIMATE: PerryCdomThermostat INIT UID: " + self._attr_unique_id + " Name: " + self._attr_name + " - zone " + str(self._zone_id))
 
-        self._attr_temperature_unit = unit
-        self._cur_temp = 18
-        self._min_temp = 5
-        self._max_temp = 39
-        self._target_temp = 25
-        self._attr_current_temperature = 18
-        self._attr_preset_mode = PRESET_NONE
-        self._zone_id = zone_id
+        #self._update_data()
+        
+        #self._attr_hvac_mode = initial_hvac_mode
 
+
+
+        #self._attr_temperature_unit = unit
+        #self._cur_temp = 18
+        #self._min_temp = 5
+        #self._max_temp = 39
+        #self._target_temp = 25
+        #self._attr_current_temperature = 18
+        #self._attr_preset_mode = PRESET_NONE
+        
         self._coordinator=coordinator
 
-        self._attr_supported_features = (
-            ClimateEntityFeature.TARGET_TEMPERATURE
-            | ClimateEntityFeature.TURN_OFF
-            | ClimateEntityFeature.TURN_ON
-        )
+        if controller:
+            self._attr_hvac_mode = HVACMode.AUTO
+            self._attr_supported_features = (
+                ClimateEntityFeature.TURN_OFF
+                | ClimateEntityFeature.TURN_ON
+            )
+        else:
+            self._attr_supported_features = (
+                ClimateEntityFeature.TARGET_TEMPERATURE
+                | ClimateEntityFeature.TURN_OFF
+                | ClimateEntityFeature.TURN_ON
+            )
 
     def async_update_callback(self) -> None:
-        """dsds"""
-        _LOGGER.warning("CLIMATE: GenericThermostat async_update_callback ")
+        """Call Back"""
+        _LOGGER.debug("CLIMATE: PerryCoordinator async_update_callback ")
+
+    def _update_data(self):
+        """Internal update"""
+        _LOGGER.debug("PerryCoordinator _update_data " + json.dumps(self.zones) )
+        self.update_data(self.thermozone, self.zones[self._zone_id])
+
 
     def update_data(self, thermozone, zone):
         """Update self data"""
-        self._attr_current_temperature=zone['lastTemperature']
-        self.open_valve=zone['temperatureDevice']['openValve']
-        if zone['temperatureDevice']['openValve'] == False and zone['askingComfortTemperature'] == False:
-            self._attr_hvac_mode = HVACMode.OFF
+
+        # if season is not winter set cool mode
+        self.season = thermozone['currentSeason']
+        if self.season == CDOM_SHARED_SEASON_WINTER:
+            self._attr_hvac_modes = [HVACMode.HEAT, HVACMode.OFF]
         else:
-            self._attr_hvac_mode = HVACMode.HEAT
-
-        self._attr_max_temp = thermozone['maxTemperatureThreshold']
-        self._attr_min_temp = thermozone['minTemperatureThreshold']
-
-        if zone['humidity'] > 0:
-            self._attr_current_humidity = zone['humidity']
-        match zone['currentProfileLevel']:
-            case 1:
-                self._attr_target_temperature = zone['functionsParams']['winterT1SetPoint']
-            case 2:
-                self._attr_target_temperature = zone['functionsParams']['winterT2SetPoint']
-            case 3:
-                self._attr_target_temperature = thermozone['t3SetPointWinter']
-            case 5:
-                self._attr_target_temperature = zone['customTemperatureForManualMode']
+            self._attr_hvac_modes = [HVACMode.COOL, HVACMode.OFF]
 
 
+        if self.controller:
+            self.current_thermo_mode = thermozone['currentSharedThermoMode']
+            if self.current_thermo_mode == CDOM_SHARED_THERMO_MODE_OFF:
+                self._attr_hvac_mode = HVACMode.OFF
+            else:
+                self._attr_hvac_mode = HVACMode.HEAT                
 
+        # Update the data only if it's the coordinator
+        else:
+            self._attr_current_temperature=zone['lastTemperature']
+            self.open_valve=zone['temperatureDevice']['openValve']
+            if zone['temperatureDevice']['openValve'] == False and zone['askingComfortTemperature'] == False:
+                self._attr_hvac_mode = HVACMode.OFF
+            else:
+                self._attr_hvac_mode = HVACMode.HEAT
+
+            self._attr_max_temp = thermozone['maxTemperatureThreshold']
+            self._attr_min_temp = thermozone['minTemperatureThreshold']
+
+            if zone['humidity'] > 0:
+                self._attr_current_humidity = zone['humidity']
+            match zone['currentProfileLevel']:
+                case 1:
+                    self._attr_target_temperature = zone['functionsParams']['winterT1SetPoint']
+                case 2:
+                    self._attr_target_temperature = zone['functionsParams']['winterT2SetPoint']
+                case 3:
+                    self._attr_target_temperature = thermozone['t3SetPointWinter']
+                case 5:
+                    self._attr_target_temperature = zone['customTemperatureForManualMode']
 
     async def async_update(self) -> None:
-        """dsds"""
-        _LOGGER.warning("CLIMATE: GenericThermostat async_update ")
+        """Async Update"""
+        _LOGGER.debug("CLIMATE: PerryCoordinator async_update id " + self._attr_unique_id )
         data = self._coordinator.get_zone(self._zone_id)
         rawdata = self._coordinator.get_thermozone()
         self.update_data(rawdata,data)
 
 
     async def async_added_to_hass(self):
-        """dsds"""
-        _LOGGER.warning("CLIMATE: GenericThermostat async_added_to_hass ")
+        """async_added_to_hass"""
+        _LOGGER.debug("CLIMATE: PerryCoordinator async_added_to_hass ")
         await super().async_added_to_hass()
         self._coordinator.async_add_listener(self.async_write_ha_state)
 
@@ -234,7 +285,7 @@ class PerryCoordinator(DataUpdateCoordinator):
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=update_interval)
 
     def get_data(self):
-        _LOGGER.warning("PerryCoordinator get_data: data")
+        _LOGGER.debug("PerryCoordinator get_data: data")
         try:
             _LOGGER.debug("PerryCoordinator get_data: data " + json.dumps(self.data) )
             return(self.data)
@@ -243,7 +294,7 @@ class PerryCoordinator(DataUpdateCoordinator):
             return False
         
     def get_thermozone(self):
-        _LOGGER.warning("PerryCoordinator get_data: data")
+        _LOGGER.debug("PerryCoordinator get_data: data")
         try:
             _LOGGER.debug("PerryCoordinator get_data: data " + json.dumps(self.data) )
             return(self.thermozone)
@@ -253,33 +304,32 @@ class PerryCoordinator(DataUpdateCoordinator):
 
     def get_zone(self,zone_id):
         #_LOGGER.warning("PerryCoordinator get_data: data " + json.dumps(self.data) )
-        _LOGGER.warning("PerryCoordinator get_data: zone")
+        _LOGGER.debug("PerryCoordinator get_data: zone")
         try:
             return(self.zones[zone_id])
         except Exception as error:
-            _LOGGER.debug(f"An error occured while getting zone using zone_id " + zone_id +  ": {error}")
+            _LOGGER.warning(f"An error occured while getting zone using zone_id " + str(zone_id) +  ": {error}")
             return False
 
 
     async def _async_update_data(self):
         """Update data via library."""
-        _LOGGER.warning("Updating data from Perry CDOM: _async_update_data")
+        _LOGGER.debug("Updating data from Perry CDOM: _async_update_data")
         await self.update()
-        #_LOGGER.warning("PerryCoordinator _async_update_data: data " + json.dumps(self.data) )
 
     async def update(self) -> bool:
         """Update status from Perry CDOM"""
-
-        # Update vehicle data
-        _LOGGER.warning("Updating data from Perry CDOM")
+        # Update data
+        _LOGGER.info("Updating data from Perry CDOM")
         try:
-            _LOGGER.warning("GET DATA")
-            banana = api.PerryCDom(dict(self.entry.options)["cdom_pin"],dict(self.entry.options)["cdom_serial_number"])
+            _LOGGER.info("Updating data from Perry CDOM api object")
+            perrydata = api.PerryCDom(dict(self.entry.options)["cdom_pin"],dict(self.entry.options)["cdom_serial_number"])
             loop = asyncio.get_running_loop()
 
-            data = await loop.run_in_executor(None, banana.thermoreg_get_info)
+            data = await loop.run_in_executor(None, perrydata.thermoreg_get_info)
             self.data = data
             self.thermozone = self.data['ThermoZonesContainer']
+            self.zones[0]=dict()
             for zone in self.data['ThermoZonesContainer']['zones']:
                 self.zones[zone['zoneId']] = zone
             _LOGGER.debug("PerryCoordinator update: result " + json.dumps(self.data) )
