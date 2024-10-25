@@ -36,6 +36,7 @@ CDOM_SHARED_SEASON_WINTER = 0
 CDOM_SHARED_SEASON_SUMMER = 1
 
 PRESET_FROST_GUARD = "Frost Guard"
+PRESET_MANAGED = "Managed by Thermostat"
 
 CONF_AC_MODE = "ac_mode"
 CONF_COLD_TOLERANCE = "cold_tolerance"
