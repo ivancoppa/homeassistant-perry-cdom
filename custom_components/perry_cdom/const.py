@@ -5,6 +5,7 @@ DOMAIN = "perry_cdom"
 
 from homeassistant.components.climate import (
     PRESET_ACTIVITY,
+    PRESET_NONE,
     PRESET_AWAY,
     PRESET_COMFORT,
     PRESET_ECO,
@@ -34,6 +35,8 @@ CDOM_SHARED_SEASON_WINTER = 0
 # Summer Season: Cold
 CDOM_SHARED_SEASON_SUMMER = 1
 
+PRESET_FROST_GUARD = "Frost Guard"
+PRESET_MANAGED = "Managed by Thermostat"
 
 CONF_AC_MODE = "ac_mode"
 CONF_COLD_TOLERANCE = "cold_tolerance"
@@ -43,6 +46,7 @@ CONF_MIN_DUR = "min_cycle_duration"
 CONF_PRESETS = {
     p: f"{p}_temp"
     for p in (
+        PRESET_NONE,
         PRESET_AWAY,
         PRESET_COMFORT,
         PRESET_ECO,
