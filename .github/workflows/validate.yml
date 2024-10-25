@@ -1,0 +1,34 @@
+name: "Validate"
+
+on:
+  push:
+    branches:
+      - main
+      - hacs
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-hassfest:
+    name: With hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Hassfest validation
+        uses: home-assistant/actions/hassfest@master
+
+  validate-hacs:
+    name: With HACS action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: HACS Validation
+        uses: hacs/action@main
+        with:
+          category: integration
+          comment: True
