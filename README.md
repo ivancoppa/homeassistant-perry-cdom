@@ -1,4 +1,11 @@
 # Perry Electric CDOM for Home Assistant
+
+[![GitHub Release][releases-shield]][releases]
+[![License][license-shield]](LICENSE)
+
+[![hacs][hacsbadge]][hacs]
+[![Project Maintenance][maintenance-shield]][user_profile]
+[![BuyMeCoffee][buymecoffeebadge]][buymecoffee]
 A custom component designed for Home Assistant with the capability to interact with the Perry Electric Thermostat C.DOM/CRM 4.0.
 
 ## Disclaimer :warning:
