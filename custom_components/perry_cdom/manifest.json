@@ -7,5 +7,6 @@
   "iot_class": "cloud_polling",
   "name": "Perry CDOM",
   "requirements": ["voluptuous","perry_cdom_api_community==0.1.2"],
+  "issue_tracker": "https://github.com/ivancoppa/homeassistant-perry-cdom/issues",
   "version": "0.0.1"
 }
