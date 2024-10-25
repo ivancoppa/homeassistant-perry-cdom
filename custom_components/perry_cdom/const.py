@@ -5,11 +5,11 @@ DOMAIN = "perry_cdom"
 
 from homeassistant.components.climate import (
     PRESET_ACTIVITY,
-    PRESET_NONE,
     PRESET_AWAY,
     PRESET_COMFORT,
     PRESET_ECO,
     PRESET_HOME,
+    PRESET_NONE,
     PRESET_SLEEP,
 )
 from homeassistant.const import Platform
