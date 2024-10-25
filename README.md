@@ -1,13 +1,39 @@
 # Perry Electric CDOM for Home Assistant
 A custom component designed for Home Assistant with the capability to interact with the Perry Electric Thermostat C.DOM/CRM 4.0.
 
+## Disclaimer :warning:
+
+This project is unofficial and is not affiliated with, endorsed by, or supported by Perry Electric, Use this library and integration at your own risk. I am not responsible for any damages, malfunctions, or issues that may arise from using this software with your thermostat or any other device.
+
+This project is unofficial and not affiliated with, endorsed by, or supported by Perry Electric. It is a personal initiative created to facilitate interaction with Perry Electric thermostats through a Python library and Home Assistant integration.
+### Important Notice :warning:
+
+Users assume all responsibility and legal liability for using this software. This library is intended to provide convenient access to thermostat controls for developers and hobbyists. It is not an official Perry Electric package, and excessive or commercial usage may lead to restrictions on your device or account.
+
+Please note that using this software may involve risks, including possible malfunctions or compatibility issues with future updates by Perry Electric. Use at your own risk.
+
 ## Current Status
-In the current state the component only reads the data.
-It will create a new Climate entity for each zone + 1 for controlling without any temperature.
+
+### What is working
+
+#### Thermostat
+- Read thermostat data
+- Shows heating or idle depending on the status of the valves
+- Support for HVAC_MODES OFF and AUTO
+- Support for BOOST and AWAY preset
+  - BOOST preset sets the manual temperature to 30 until midnight
+  - AWAY preset turns off the thermoregulator
+- Power on and off of the thermoregulator
+
+#### Valves
+- Read data from Valves
+- Support for HVAC_MODES OFF and AUTO
+- Support for setting the manual temperature until midnight
 
 ### What's not working
-- Change of temperature
-- Power on and off of the thermostats
+- Change of season
+- Support to change temeperature for indefinite time.
+- Ability to configure zones schedule and zone temperature T1, T2 and T3
 
 ## Installation
 
