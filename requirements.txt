@@ -1,0 +1,3 @@
+aiohttp
+homeassistant==2024.8.0
+perry_cdom_api_community==0.0.2
