@@ -5,8 +5,6 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any, cast
 
-from homeassistant.components import fan, switch
-from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN, SensorDeviceClass
 from homeassistant.const import CONF_NAME, DEGREE
 from homeassistant.helpers import selector
 from homeassistant.helpers.schema_config_entry_flow import (
@@ -19,14 +17,8 @@ from .const import (  # CONF_AC_MODE,
     CONF_CDOM_PIN,
     CONF_CDOM_SCAN_INTERVAL,
     CONF_CDOM_SERIAL_NUMBER,
-    CONF_COLD_TOLERANCE,
-    CONF_HEATER,
-    CONF_HOT_TOLERANCE,
-    CONF_MIN_DUR,
     CONF_PRESETS,
     CONF_SCAN_INTERVAL_SECONDS,
-    CONF_SENSOR,
-    DEFAULT_TOLERANCE,
     DOMAIN,
 )
 

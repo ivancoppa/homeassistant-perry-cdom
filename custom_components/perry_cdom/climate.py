@@ -2,24 +2,15 @@
 
 from __future__ import annotations
 
-import asyncio
-import collections
-from collections import ChainMap
-import copy
 from datetime import timedelta
 import json
 import logging
-from typing import Any, cast
+from typing import Any
 
 from homeassistant.components.climate import (
-    ATTR_PRESET_MODE,
-    DEFAULT_MIN_TEMP,
-    PLATFORM_SCHEMA as CLIMATE_PLATFORM_SCHEMA,
     PRESET_AWAY,
     PRESET_BOOST,
     PRESET_COMFORT,
-    PRESET_HOME,
-    PRESET_NONE,
     ClimateEntity,
     ClimateEntityFeature,
     HVACAction,
@@ -27,41 +18,18 @@ from homeassistant.components.climate import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
-    ATTR_ENTITY_ID,
-    ATTR_TEMPERATURE,
-    CONF_NAME,
-    CONF_UNIQUE_ID,
-    EVENT_HOMEASSISTANT_START,
-    PRECISION_HALVES,
-    PRECISION_TENTHS,
-    PRECISION_WHOLE,
-    SERVICE_TURN_OFF,
-    SERVICE_TURN_ON,
-    STATE_ON,
-    STATE_UNAVAILABLE,
-    STATE_UNKNOWN,
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.event import (
-    async_track_state_change_event,
-    async_track_time_interval,
-)
 from homeassistant.helpers.restore_state import RestoreEntity
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType, VolDictType
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from . import api
 from .const import (
-    CDOM_SHARED_SEASON_SUMMER,
     CDOM_SHARED_SEASON_WINTER,
     CDOM_SHARED_THERMO_MODE_OFF,
-    CDOM_SHARED_THERMO_MODE_ON,
-    CONF_PRESETS,
     CONF_UPDATE_INTERVAL_SECONDS,
     DOMAIN,
-    PLATFORMS,
     PRESET_FROST_GUARD,
     PRESET_MANAGED,
 )

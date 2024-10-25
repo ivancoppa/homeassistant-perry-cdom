@@ -1,7 +1,5 @@
-import json
 import logging
 
-import requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -9,8 +7,6 @@ SHARED_THERMO_MODE_ON = 0
 SHARED_THERMO_MODE_OFF = 5
 
 from aiohttp import ClientSession
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from perry_cdom_api_community.api import PerryCdomCrm4API
 from perry_cdom_api_community.entity import PerryThermostat
 
