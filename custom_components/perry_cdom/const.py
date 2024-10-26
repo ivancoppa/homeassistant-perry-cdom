@@ -1,6 +1,3 @@
-DOMAIN = "perry_cdom"
-
-
 """Constants for the Generic Thermostat helper."""
 
 from homeassistant.components.climate import (
@@ -13,6 +10,8 @@ from homeassistant.components.climate import (
     PRESET_SLEEP,
 )
 from homeassistant.const import Platform
+
+DOMAIN = "perry_cdom"
 
 PLATFORMS = [Platform.CLIMATE]
 

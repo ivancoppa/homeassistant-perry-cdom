@@ -1,14 +1,14 @@
 import logging
 
 
-_LOGGER = logging.getLogger(__name__)
+from aiohttp import ClientSession
+from perry_cdom_api_community.api import PerryCdomCrm4API
+from perry_cdom_api_community.entity import PerryThermostat
 
 SHARED_THERMO_MODE_ON = 0
 SHARED_THERMO_MODE_OFF = 5
 
-from aiohttp import ClientSession
-from perry_cdom_api_community.api import PerryCdomCrm4API
-from perry_cdom_api_community.entity import PerryThermostat
+_LOGGER = logging.getLogger(__name__)
 
 
 # api integration for Perry C.DOM
