@@ -22,8 +22,8 @@ jobs:
 
       - name: Create zip
         run: |
-          cd custom_components/wellbeing
-          zip wellbeing.zip -r ./
+          cd custom_components/perry_cdom
+          zip perry_cdom.zip -r ./
 
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
