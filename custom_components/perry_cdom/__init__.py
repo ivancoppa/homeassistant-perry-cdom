@@ -1,14 +1,10 @@
-import asyncio
 import json
 import logging
 
-import async_timeout
-from homeassistant import core
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from . import api
-from .const import DOMAIN, PLATFORMS
+from .const import PLATFORMS
 
 _LOGGER = logging.getLogger(__name__)
 
