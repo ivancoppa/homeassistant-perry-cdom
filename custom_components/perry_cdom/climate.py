@@ -34,12 +34,11 @@ from .const import (
     PRESET_MANAGED,
 )
 
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from perry_cdom_api_community.api import PerryCDomApiClient
+
 CURRENT_HVAC_MAP = {True: HVACAction.HEATING, False: HVACAction.IDLE}
 
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-
-# from perry_cdom_api_community.api import PerryCdomCrm4API
-from .api import PerryCDomApiClient
 
 _LOGGER = logging.getLogger(__name__)
 # Time between updating data from GitHub
@@ -136,7 +135,6 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
         zone_id: int | None,
         coordinator,
     ) -> None:
-
         self.platforms = []
         self.data = dict()
         self.thermozone = dict()
@@ -204,7 +202,7 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
         else:
             self._attr_hvac_modes = [HVACMode.AUTO, HVACMode.OFF]
 
-        if self.controller or zone == None:
+        if self.controller or zone is None:
             # Update the data only if it's the coordinator
             self.current_thermo_mode = thermozone["currentSharedThermoMode"]
             if self.current_thermo_mode == CDOM_SHARED_THERMO_MODE_OFF:
@@ -338,9 +336,9 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
         """Turn the entity off."""
         _LOGGER.info("PerryCoordinator async_turn_off")
         if self.thermo_type == "controller":
-            data = await self._coordinator.set_thermoregulation_off()
+            await self._coordinator.set_thermoregulation_off()
         if self.thermo_type == "valve":
-            data = await self._coordinator.set_zone_temperature_manual(self._zone_id, 5)
+            await self._coordinator.set_zone_temperature_manual(self._zone_id, 5)
 
         self.hass.async_create_task(self.async_update(), eager_start=True)
         self.async_write_ha_state()
@@ -349,9 +347,9 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
         """Turn the entity heat."""
         _LOGGER.info("PerryCoordinator async_turn_off")
         if self.thermo_type == "controller":
-            data = await self._coordinator.set_thermoregulation_on()
+            await self._coordinator.set_thermoregulation_on()
         if self.thermo_type == "valve":
-            data = await self._coordinator.set_zone_temperature_auto(self._zone_id)
+            await self._coordinator.set_zone_temperature_auto(self._zone_id)
 
         self.hass.async_create_task(self.async_update(), eager_start=True)
         self.async_write_ha_state()
@@ -361,7 +359,7 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
         _LOGGER.info("PerryCoordinator async_set_temperature " + str(self._zone_id))
         _LOGGER.info("PerryCoordinator async_set_temperature " + json.dumps(kwargs))
         if self.thermo_type == "valve":
-            data = await self._coordinator.set_zone_temperature_manual(
+            await self._coordinator.set_zone_temperature_manual(
                 self._zone_id, kwargs["temperature"]
             )
             self.hass.async_create_task(self.async_update(), eager_start=True)
