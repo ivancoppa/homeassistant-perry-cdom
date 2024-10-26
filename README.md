@@ -1,4 +1,10 @@
 # Perry Electric CDOM for Home Assistant
+
+[![GitHub Release][releases-shield]][releases]
+[![License][license-shield]](LICENSE)
+[![hacs][hacsbadge]][hacs]
+[![Project Maintenance][maintenance-shield]][user_profile]
+
 A custom component designed for Home Assistant with the capability to interact with the Perry Electric Thermostat C.DOM/CRM 4.0.
 
 ## Disclaimer :warning:
@@ -58,3 +64,11 @@ In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "P
 Configure the integration using the following parameters
 
 <img src="images/configuration-configure-thermostat.png">
+
+[hacs]: https://hacs.xyz
+[hacsbadge]: https://img.shields.io/badge/HACS-Default-orange.svg
+[license-shield]: https://img.shields.io/github/license/ivancoppa/homeassistant-perry-cdom.svg
+[maintenance-shield]: https://img.shields.io/badge/maintainer-%40ivancoppa.svg
+[releases-shield]: https://img.shields.io/github/release/ivancoppa/homeassistant-perry-cdom.svg
+[releases]: https://github.com/ivancoppa/homeassistant-perry-cdom/releases
+[user_profile]: https://github.com/ivancoppa
