@@ -1,11 +1,17 @@
 {
-  "codeowners": ["@ivancoppa"],
-  "config_flow": true,
-  "dependencies": [],
-  "documentation": "https://github.com/ivancoppa/homeassistant-perry-cdom/",
-  "domain": "perry_cdom",
-  "iot_class": "cloud_polling",
-  "name": "Perry CDOM",
-  "requirements": ["voluptuous","perry_cdom_api_community==0.1.2"],
-  "version": "0.0.1"
+    "domain": "perry_cdom",
+    "name": "Perry CDOM",
+    "codeowners": [
+        "@ivancoppa"
+    ],
+    "config_flow": true,
+    "dependencies": [],
+    "documentation": "https://github.com/ivancoppa/homeassistant-perry-cdom/",
+    "iot_class": "cloud_polling",
+    "issue_tracker": "https://github.com/ivancoppa/homeassistant-perry-cdom/issues",
+    "requirements": [
+        "voluptuous",
+        "perry_cdom_api_community==0.1.2"
+    ],
+    "version": "0.0.2"
 }
