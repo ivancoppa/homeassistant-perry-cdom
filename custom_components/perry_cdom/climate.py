@@ -35,7 +35,7 @@ from .const import (
 )
 
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from perry_cdom_api_community.api import PerryCDomApiClient
+from .api import PerryCDomApiClient
 
 CURRENT_HVAC_MAP = {True: HVACAction.HEATING, False: HVACAction.IDLE}
 
