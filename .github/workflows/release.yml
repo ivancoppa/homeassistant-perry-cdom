@@ -29,7 +29,7 @@ jobs:
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./custom_components/wellbeing/wellbeing.zip
-          asset_name: wellbeing.zip
+          file: ./custom_components/perry_cdom/perry_cdom.zip
+          asset_name: perry_cdom.zip
           tag: ${{ github.ref }}
           overwrite: true
