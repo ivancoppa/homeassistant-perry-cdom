@@ -12,6 +12,7 @@ A custom component designed for Home Assistant with the capability to interact w
 This project is unofficial and is not affiliated with, endorsed by, or supported by Perry Electric, Use this library and integration at your own risk. I am not responsible for any damages, malfunctions, or issues that may arise from using this software with your thermostat or any other device.
 
 This project is unofficial and not affiliated with, endorsed by, or supported by Perry Electric. It is a personal initiative created to facilitate interaction with Perry Electric thermostats through a Python library and Home Assistant integration.
+
 ### Important Notice :warning:
 
 Users assume all responsibility and legal liability for using this software. This library is intended to provide convenient access to thermostat controls for developers and hobbyists. It is not an official Perry Electric package, and excessive or commercial usage may lead to restrictions on your device or account.
