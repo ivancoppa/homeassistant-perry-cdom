@@ -213,6 +213,7 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
                 self._attr_preset_mode = PRESET_MANAGED
 
             action = HVACAction.IDLE
+            temperature = 100
             for zone in thermozone["zones"]:
                 target_temperature = 0
                 match zone["currentProfileLevel"]:
@@ -229,6 +230,11 @@ class PerryCdomThermostat(ClimateEntity, RestoreEntity):
                     break
                 else:
                     action = HVACAction.IDLE
+
+                if zone["lastTemperature"] < temperature:
+                    temperature = zone["lastTemperature"]
+
+            self._attr_current_temperature = temperature
             self._attr_hvac_action = action
 
         else:
